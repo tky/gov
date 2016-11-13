@@ -17,11 +17,29 @@ func isnil(x interface{}) bool {
 
 // Required required v return error if v is nil.
 func Required(v interface{}, values []string) error {
-	if isnil(v) {
-		return ErrValidation
-	} else if len(values) != 0 {
+	if len(values) != 0 {
 		return ErrIllegalParamsOnRequired
-	} else {
+	}
+	if v == nil {
+		return ErrValidation
+	}
+	if reflect.TypeOf(v).Kind() == reflect.Ptr {
+		if isnil(v) {
+			return ErrValidation
+		}
+	}
+
+	switch v.(type) {
+	case string:
+		if len(v.(string)) == 0 {
+			return ErrValidation
+		}
+	case *string:
+		if len(*v.(*string)) == 0 {
+			return ErrValidation
+		}
+	default:
 		return nil
 	}
+	return nil
 }
