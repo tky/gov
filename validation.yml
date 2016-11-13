@@ -6,3 +6,4 @@ Params:
 
 Rules:
   required: "{{.Name}}は必須です"
+  min-length: "{{.Name}}は{{index .Values 0}}文字以上入力してください"

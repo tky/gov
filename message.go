@@ -12,7 +12,8 @@ type MessageConfig struct {
 }
 
 type MessageData struct {
-	Name string
+	Name   string
+	Values []string
 }
 
 func LoadMessages(filename string, config *MessageConfig) error {

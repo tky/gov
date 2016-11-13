@@ -2,6 +2,7 @@ package gov
 
 import (
 	"bytes"
+	"fmt"
 	"gov/rules"
 	"html/template"
 	"reflect"
@@ -38,6 +39,7 @@ var messageConfig MessageConfig
 func init() {
 	ruleMap = map[string]rules.Validate{}
 	ruleMap["required"] = rules.Required
+	ruleMap["min-length"] = rules.MinLength
 	if err := LoadMessages("validation.yml", &messageConfig); err != nil {
 		panic("erro loading validation.yml")
 	}
@@ -66,10 +68,11 @@ func Validate(target interface{}) []string {
 						if tl, ok := messageConfig.Rules[p.Key]; !ok {
 							panic("Missiong rules")
 						} else {
+							tmpl, err := template.New(p.Key).Parse(tl)
 							// TODO: error handling
-							tmpl, _ := template.New(p.Key).Parse(tl)
+							fmt.Println(err)
 							var doc bytes.Buffer
-							tmpl.Execute(&doc, MessageData{Name: name})
+							tmpl.Execute(&doc, MessageData{Name: name, Values: p.Values})
 							s := doc.String()
 							messages = append(messages, s)
 						}
