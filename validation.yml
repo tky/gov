@@ -1,0 +1,8 @@
+Params:
+  Name: 名前
+  Version: バージョン
+  Index: インデックス
+
+
+Rules:
+  required: "{{.Name}}は必須です"
